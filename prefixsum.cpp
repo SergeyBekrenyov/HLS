@@ -11,7 +11,7 @@ constexpr int clogb2(int value){
   int val = 0;
   int clogb2 = 0;
   val = value - 1;
-  for (clogb2 = 0; val > 0; clogb2 = clogb2 + 1) {
+  for (; val > 0; ++clogb2) {
     val = val >> 1;
   }
   return clogb2+1;
@@ -27,7 +27,7 @@ void test_prefixsum(int in[TEST_SIZE], int out[TEST_SIZE])
 }
 
 // book example Figure 8.1
-component void prefixsum(int arr_in[TEST_SIZE], int *arr_out)
+component void prefixsum(int arr_in[TEST_SIZE], int arr_out[TEST_SIZE])
 {
   ac_int<clogb2(TEST_SIZE), false> i;
   //static int arr_lcl[TEST_SIZE];
