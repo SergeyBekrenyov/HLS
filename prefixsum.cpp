@@ -27,16 +27,34 @@ void test_prefixsum(int in[TEST_SIZE], int out[TEST_SIZE])
 }
 
 // book example Figure 8.1
-component void prefixsum(int arr_in[TEST_SIZE], int arr_out[TEST_SIZE])
+/*component void prefixsum(int arr_in[TEST_SIZE], int arr_out[TEST_SIZE])
 {
+  //int i; original index - 32 bit integer
   ac_int<clogb2(TEST_SIZE), false> i;
-  //static int arr_lcl[TEST_SIZE];
   arr_out[0] = arr_in[0];
   for (i = 1; i < TEST_SIZE; i++){
     //#pragma HLS_PIPELINE Xilinx's version - to replace with Altera's one
     arr_out[i] = arr_out[i-1] + arr_in[i];
   }
-  //arr_out = arr_lcl;
+}*/
+
+// use local mem to reduce II, using labels for loops
+component void prefixsum_lcl_mem(int arr_in[TEST_SIZE], int arr_out[TEST_SIZE])
+{
+  ac_int<clogb2(TEST_SIZE), false> i;
+  static int arr_lcl[TEST_SIZE];
+  arr_lcl[0] = arr_in[0];
+  // local mem
+  lcl_mem:
+  for (i = 1; i < TEST_SIZE; i++){
+    //#pragma HLS_PIPELINE Xilinx's version - to replace with Altera's one
+    arr_lcl[i] = arr_lcl[i-1] + arr_in[i];
+  }
+  //copy results
+  cp_rslt:
+  for (i = 0; i < TEST_SIZE; i++){
+    arr_out[i] = arr_lcl[i];
+  }
 }
 
 int main(void) {
@@ -52,12 +70,14 @@ int main(void) {
   }
 
   test_prefixsum(test_vector, golden);
-  prefixsum(test_vector, result);
+  prefixsum_lcl_mem(test_vector, result);
 
   for (int i = 0; i < TEST_SIZE; ++i) {
-    printf("%d, %d\n", result[i], golden[i]);
-    if(result[i] != golden[i])
+    //printf("%d, %d\n", result[i], golden[i]);
+    if(result[i] != golden[i]){
+      printf("i=%d, %d, %d\n", i, result[i], golden[i]);
       passed = false;
+    }
   }
     
   if (passed) {
