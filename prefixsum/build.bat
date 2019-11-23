@@ -38,7 +38,7 @@ if "%TARGET%" == "test-x86-64" (
   set "LFLAGS=-o %TARGET%.exe"
 ) else if "%TARGET%" == "test-fpga" (
   set "CXX=i++"
-  set "CXXFLAGS=%HLS_CXX_FLAGS% -march=Arria10
+  set "CXXFLAGS=%HLS_CXX_FLAGS% -march=Cyclone10GX --simulator none
   set "LFLAGS=-o %TARGET%.exe"
 ) else if "%TARGET%" == "test-msvc" (
   set "CXX=cl"
