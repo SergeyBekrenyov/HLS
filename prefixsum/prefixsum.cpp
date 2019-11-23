@@ -3,6 +3,9 @@
 #include "HLS/hls.h"
 #include "HLS/ac_int.h"
 
+#define original
+#define local_mem
+
 #define TEST_SIZE 128
 #define TEST_SIZE_bits 8
 #define SEED 4
@@ -26,26 +29,35 @@ void test_prefixsum(int in[TEST_SIZE], int out[TEST_SIZE])
   }
 }
 
+#ifdef original
 // book example Figure 8.1
-/*component void prefixsum(int arr_in[TEST_SIZE], int arr_out[TEST_SIZE])
+component void prefixsum(int arr_in[TEST_SIZE], int arr_out[TEST_SIZE])
 {
   //int i; original index - 32 bit integer
   ac_int<clogb2(TEST_SIZE), false> i;
   arr_out[0] = arr_in[0];
+  // ??? Intel's HLS compiler tries to pipeline loop
+  // 18.1 says it's unknown pragma!
+  // #pragma disable_loop_pipelining
+  // #pragma unroll 1 // actually the same results as without it
   for (i = 1; i < TEST_SIZE; i++){
     //#pragma HLS_PIPELINE Xilinx's version - to replace with Altera's one
     arr_out[i] = arr_out[i-1] + arr_in[i];
   }
-}*/
-
+}
+#endif // original
+#ifdef local_mem
 // use local mem to reduce II, using labels for loops
-component void prefixsum_lcl_mem(int arr_in[TEST_SIZE], int arr_out[TEST_SIZE])
+component void prefixsum(int arr_in[TEST_SIZE], int arr_out[TEST_SIZE])
 {
   ac_int<clogb2(TEST_SIZE), false> i;
   static int arr_lcl[TEST_SIZE];
   arr_lcl[0] = arr_in[0];
   // local mem
   lcl_mem:
+  // Intel's HLS compiler tries to pipeline loop
+  //#pragma disable_loop_pipelining
+  //#pragma unroll 1 // looks like acts the same as disable_loop_pipelining
   for (i = 1; i < TEST_SIZE; i++){
     //#pragma HLS_PIPELINE Xilinx's version - to replace with Altera's one
     arr_lcl[i] = arr_lcl[i-1] + arr_in[i];
@@ -56,6 +68,7 @@ component void prefixsum_lcl_mem(int arr_in[TEST_SIZE], int arr_out[TEST_SIZE])
     arr_out[i] = arr_lcl[i];
   }
 }
+#endif //local_mem
 
 int main(void) {
 
@@ -70,7 +83,7 @@ int main(void) {
   }
 
   test_prefixsum(test_vector, golden);
-  prefixsum_lcl_mem(test_vector, result);
+  prefixsum(test_vector, result);
 
   for (int i = 0; i < TEST_SIZE; ++i) {
     //printf("%d, %d\n", result[i], golden[i]);
