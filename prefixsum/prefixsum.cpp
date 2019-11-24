@@ -3,7 +3,7 @@
 #include "HLS/hls.h"
 #include "HLS/ac_int.h"
 
-#define original
+//#define original
 #define local_mem
 
 #define TEST_SIZE 128
