@@ -80,6 +80,7 @@ int main(void) {
   srand(SEED);
   for (int i = 0; i < TEST_SIZE; ++i) {
     test_vector[i] = abs(rand());
+    printf("i=%d, %d\n", i, test_vector[i]);
   }
 
   test_prefixsum(test_vector, golden);
@@ -88,7 +89,7 @@ int main(void) {
   for (int i = 0; i < TEST_SIZE; ++i) {
     //printf("%d, %d\n", result[i], golden[i]);
     if(result[i] != golden[i]){
-      printf("i=%d, %d, %d\n", i, result[i], golden[i]);
+      //printf("i=%d, %d, %d\n", i, result[i], golden[i]);
       passed = false;
     }
   }
