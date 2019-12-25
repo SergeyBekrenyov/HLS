@@ -1,4 +1,4 @@
-SOURCE_FILES  := histogram.cpp
+SOURCE_FILES  := main.cpp bayer.cpp
 HLS_CXX_FLAGS := 
 CXX := i++
 override CXXFLAGS := $(CXXFLAGS)
