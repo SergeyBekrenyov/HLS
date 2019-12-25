@@ -33,28 +33,74 @@
   }
 }*/
 
-void update_line_buffers(int width, int height, pxl_N i_pxls, pxl_N line_buf[]){
-     
+void update_line_buffers(int width, int height, pxl_b12 i_pxls, pxl_N line_buf[5][MAX_WDTH]){
+    static int pxl_nmb; 
     //update line buffers
-    for(int j = 0; j < height; j++){
-      for(int i = 0; i < width; i+=N_pxls){
+    /*for(int j = 0; j < height; j++){
+      for(int i = 0; i < width; i+=N_pxls){*/
         pxl_N i_str_val; // input stream pixel data
-        i_str_val = i_pxls;
-        line_buf[4][i+j] = line_buf[3][i+j];
-        line_buf[3][i+j] = line_buf[2][i+j];
-        line_buf[2][i+j] = line_buf[1][i+j];
-        line_buf[1][i+j] = line_buf[0][i+j];
-        line_buf[0][i+j] = i_str_val[j];
-      }
-    }
+        i_str_val.data[0] = i_pxls;
+        //printf("Bayer:  0x%3X", (int) i_pxls);
+        //printf(" 0x%3X", (int) i_str_val.data[0]);
+        line_buf[4][pxl_nmb] = line_buf[3][pxl_nmb];
+        line_buf[3][pxl_nmb] = line_buf[2][pxl_nmb];
+        line_buf[2][pxl_nmb] = line_buf[1][pxl_nmb];
+        line_buf[1][pxl_nmb] = line_buf[0][pxl_nmb];
+        line_buf[0][pxl_nmb] = i_str_val;//[j];
+        if(pxl_nmb < (width - 1))
+          pxl_nmb++;
+        else 
+          pxl_nmb = 0;
+    //  }
+    //}
     
     for (int j = 0; j < 5; ++j){
-      printf("\nLine #%d", j);
+      printf("\nLine #%d : ", j);
       for(int i = 0; i < width; i++){
-        printf("%3X ", line_buf[j,i]);
+        printf("0x%3X ", (int) line_buf[j][i].data[0]);
       }
     }
     
 }
 
-
+void update_window_buffer(int width, int height, pxl_N line[5], pxl_N window_buf[5][5]){
+    static int pxl_nmb; 
+    //update window buffers
+    for(int pxl_nmb = 0; pxl_nmb < 4; ++pxl_nmb){
+      window_buf[4][pxl_nmb] = line_buf[3][pxl_nmb];
+        line_buf[3][pxl_nmb] = line_buf[2][pxl_nmb];
+        line_buf[2][pxl_nmb] = line_buf[1][pxl_nmb];
+        line_buf[1][pxl_nmb] = line_buf[0][pxl_nmb];
+        line_buf[0][pxl_nmb] = i_str_val;//[j];
+        if(pxl_nmb < (5 - 1))
+          pxl_nmb++;
+        else 
+          pxl_nmb = 0;
+    //  }
+    //}
+    /*for(int j = 0; j < height; j++){
+      for(int i = 0; i < width; i+=N_pxls){*/
+        pxl_N i_str_val; // input stream pixel data
+        i_str_val.data[0] = i_pxls;
+        //printf("Bayer:  0x%3X", (int) i_pxls);
+        //printf(" 0x%3X", (int) i_str_val.data[0]);
+        line_buf[4][pxl_nmb] = line_buf[3][pxl_nmb];
+        line_buf[3][pxl_nmb] = line_buf[2][pxl_nmb];
+        line_buf[2][pxl_nmb] = line_buf[1][pxl_nmb];
+        line_buf[1][pxl_nmb] = line_buf[0][pxl_nmb];
+        line_buf[0][pxl_nmb] = i_str_val;//[j];
+        if(pxl_nmb < (5 - 1))
+          pxl_nmb++;
+        else 
+          pxl_nmb = 0;
+    //  }
+    //}
+    
+    for (int j = 0; j < 5; ++j){
+      printf("\nLine #%d : ", j);
+      for(int i = 0; i < width; i++){
+        printf("0x%3X ", (int) line_buf[j][i].data[0]);
+      }
+    }
+    
+}
