@@ -32,12 +32,107 @@
     i_str_val = i_str.read();b12j];
   }
 }*/
+/*void sf_window_3x3_and_line_buffer(unsigned char input_pixel,
+                                   unsigned char window[3][3]) {
 
-void update_line_buffers(int width, int height, pxl_b12 i_pxls, pxl_N line_buf[5][MAX_WDTH]){
+    // shift registers
+    static unsigned prev_row_index = 0;
+    static unsigned char prev_row1[WIDTH] = {0};
+    static unsigned char prev_row2[WIDTH] = {0};
+
+    // window buffer:
+    //      window[0][0], window[0][1], window[0][2]
+    //      window[1][0], window[1][1], window[1][2]
+    //      window[2][0], window[2][1], window[2][2]
+
+    // shift existing window to the left by one
+    window[0][0] = window[0][1];
+    window[0][1] = window[0][2];
+    window[1][0] = window[1][1];
+    window[1][1] = window[1][2];
+    window[2][0] = window[2][1];
+    window[2][1] = window[2][2];
+
+    int prev_row_elem1 = prev_row1[prev_row_index];
+    int prev_row_elem2 = prev_row2[prev_row_index];
+
+    // grab next column (the rightmost column of the sliding window)
+    window[0][2] = prev_row_elem2;
+    window[1][2] = prev_row_elem1;
+    window[2][2] = input_pixel;
+
+    prev_row1[prev_row_index] = input_pixel;
+    prev_row2[prev_row_index] = prev_row_elem1;
+
+    prev_row_index = (prev_row_index == WIDTH - 1) ? 0 : prev_row_index + 1;
+}*/
+
+void bf_window_5x5_and_line_buffer(pxl_b12 input_pixel,
+                                   pxl_b12 window[5][5],
+								   int width){
+	// shift registers
+    static unsigned prev_row_index = 0;
+    static pxl_b12 prev_row1[MAX_WDTH] = {0};
+    static pxl_b12 prev_row2[MAX_WDTH] = {0};
+	static pxl_b12 prev_row3[MAX_WDTH] = {0};
+	static pxl_b12 prev_row4[MAX_WDTH] = {0};
+	
+	pxl_b12 prev_row_elem1;
+	pxl_b12 prev_row_elem2;
+	pxl_b12 prev_row_elem3;
+	pxl_b12 prev_row_elem4;
+	
+
+    // window buffer:
+    //      window[0][0], window[0][1], window[0][2],  window[0][3],  window[0][4], 
+    //      window[1][0], window[1][1], window[1][2],  window[1][3],  window[1][4]
+    //      window[2][0], window[2][1], window[2][2],  window[2][3],  window[2][4]
+	//      window[3][0], window[3][1], window[3][2],  window[3][3],  window[3][4]
+	//      window[4][0], window[4][1], window[4][2],  window[4][3],  window[4][4]
+
+    //shift existing window to the left by one
+    // window[0][0] = window[0][1];
+    // window[0][1] = window[0][2];
+	
+    // window[1][0] = window[1][1];
+    // window[1][1] = window[1][2];
+	
+    // window[2][0] = window[2][1];
+    // window[2][1] = window[2][2];
+
+	outer_wnd_sr : for (int j = 0; j < 4; ++j){
+		inner_wnd_sr : for (int k = 0; k < 4; ++k){
+			window[j][k] = window[j][k+1];
+		}
+	}
+		
+// for
+    prev_row_elem1 = prev_row1[prev_row_index];
+    prev_row_elem2 = prev_row2[prev_row_index];
+	prev_row_elem3 = prev_row3[prev_row_index];
+	prev_row_elem4 = prev_row4[prev_row_index];
+	
+// for
+    // grab next column (the rightmost column of the sliding window)
+    window[0][4] = prev_row_elem4;
+	window[1][4] = prev_row_elem3;
+	window[2][4] = prev_row_elem2;
+    window[3][4] = prev_row_elem1;
+    window[4][4] = input_pixel;
+
+    prev_row1[prev_row_index] = input_pixel;
+    prev_row2[prev_row_index] = prev_row_elem1;
+	prev_row3[prev_row_index] = prev_row_elem2;
+	prev_row4[prev_row_index] = prev_row_elem3;
+
+    prev_row_index = (prev_row_index == width - 1) ? 0 : prev_row_index + 1;
+}
+
+/*void update_line_buffers(int width, int height, pxl_b12 i_pxls, pxl_N line_buf[5][MAX_WDTH]){
     static int pxl_nmb; 
     //update line buffers
     /*for(int j = 0; j < height; j++){
-      for(int i = 0; i < width; i+=N_pxls){*/
+      for(int i = 0; i < width; i+=N_pxls){/
         pxl_N i_str_val; // input stream pixel data
         i_str_val.data[0] = i_pxls;
         //printf("Bayer:  0x%3X", (int) i_pxls);
@@ -79,7 +174,7 @@ void update_window_buffer(int width, int height, pxl_N line[5], pxl_N window_buf
     //  }
     //}
     /*for(int j = 0; j < height; j++){
-      for(int i = 0; i < width; i+=N_pxls){*/
+      for(int i = 0; i < width; i+=N_pxls){/
         pxl_N i_str_val; // input stream pixel data
         i_str_val.data[0] = i_pxls;
         //printf("Bayer:  0x%3X", (int) i_pxls);
@@ -103,4 +198,4 @@ void update_window_buffer(int width, int height, pxl_N line[5], pxl_N window_buf
       }
     }
     
-}
+}*/

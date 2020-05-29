@@ -30,6 +30,10 @@ int main(void) {
   pxl_N test_img[MAX_HGHT][MAX_WDTH] = {0};
   pxl_N line_buf[5][MAX_WDTH] = {0};
   pxl_N *p_line_buf = NULL;
+  
+  //
+  pxl_b12 window[5][5];
+  
   // Create the streams
   ihc::stream_in<pxl_N>  str_A;
   
@@ -45,14 +49,14 @@ int main(void) {
     //printf("\n Line #%d : ", j); 
     for (int i = 0; i < width; ++i){
       //printf(" 0x%3X", (int) test_img[j][i].data[0]);
-      update_line_buffers(width, height, test_img[j][i].data[0], line_buf);
+      bf_window_5x5_and_line_buffer(test_img[j][i].data[0], window, width);
     }
   }
   
   for (int j = 0; j < 5; ++j){
     printf("\n Line #%d : ", j);
     for(int i = 0; i < width; ++i){
-      printf("0x%3X ", (int) line_buf[j][i].data[0]);
+      printf("0x%3X ", (int) window[j][i]);
     }
   }
 

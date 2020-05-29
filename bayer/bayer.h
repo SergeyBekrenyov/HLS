@@ -2,7 +2,7 @@
 #define BAYER_H
 
 #define AVL_ST_W 1
-#define MAX_WDTH  AVL_ST_W*5*10
+#define MAX_WDTH  AVL_ST_W*5*2
 #define MAX_HGHT  5*1
 
 // tpe definitions
@@ -21,6 +21,6 @@ component void debayer(ihc::stream_in<pxl_N>&  i_str, 				// input image stream
                        ihc::stream_in<pxl_N>&  o_str 				// input image stream
  );
 
-void update_line_buffers(int width, int height, pxl_b12 i_pxls, pxl_N line_buf[5][MAX_WDTH]);
+void bf_window_5x5_and_line_buffer(pxl_b12 input_pixel, pxl_b12 window[5][5], int width);
 
 #endif
