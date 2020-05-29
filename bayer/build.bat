@@ -1,5 +1,5 @@
 @echo off
-set "SOURCE_FILES=bayer.cpp main.cpp"
+set "SOURCE_FILES=bayer.cpp main.cpp bmp_tools.cpp"
 set "HLS_CXX_FLAGS="
 :: This batch file will compile the example design to three standard targets:
 ::   1) test-msvc    Compile the example design to the CPU

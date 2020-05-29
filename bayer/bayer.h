@@ -21,6 +21,6 @@ component void debayer(ihc::stream_in<pxl_N>&  i_str, 				// input image stream
                        ihc::stream_in<pxl_N>&  o_str 				// input image stream
  );
 
-void bf_window_5x5_and_line_buffer(pxl_b12 input_pixel, pxl_b12 window[5][5], int width);
+void bf_window_5x5_and_line_buffer(pxl_b12 input_pixel, int width, pxl_b12 window[5][5]);
 
 #endif

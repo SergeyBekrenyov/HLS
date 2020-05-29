@@ -67,9 +67,9 @@
     prev_row_index = (prev_row_index == WIDTH - 1) ? 0 : prev_row_index + 1;
 }*/
 
-void bf_window_5x5_and_line_buffer(pxl_b12 input_pixel,
-                                   pxl_b12 window[5][5],
-								   int width){
+void bf_window_5x5_and_line_buffer(pxl_b12 input_pixel, int width,
+                                   pxl_b12 window[5][5]
+								   ){
 	// shift registers
     static unsigned prev_row_index = 0;
     static pxl_b12 prev_row1[MAX_WDTH] = {0};

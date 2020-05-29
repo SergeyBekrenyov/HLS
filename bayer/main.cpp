@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "bmp_tools.h"
 #include "HLS/hls.h"
 #include "HLS/ac_int.h"
 #include "bayer.h"
@@ -34,31 +35,38 @@ int main(void) {
   //
   pxl_b12 window[5][5];
   
+  // image files
+  std::string input_bmp_filename    = "test_gray.bmp";
+  std::string output_bmp_filename   = "result.bmp";
+  // load image
+  unsigned int* in_img = 0;
+  int rows, cols;
+  read_bmp(input_bmp_filename.c_str(), &in_img, rows, cols);
+  printf("InImage %dx%d \n", cols, rows);
+  unsigned int* out_img = (unsigned int*) malloc(rows * cols * sizeof(unsigned int));
+
   // Create the streams
   ihc::stream_in<pxl_N>  str_A;
   
-  for (int j = 0; j < 5; ++j){
+  /*for (int j = 0; j < 5; ++j){
     for (int i = 0; i < width; ++i){
       line_buf[j][i].data[0] = 0x0;
     }
-  }
+  }*/
 
-  gen_test_img(test_img);
-
-  for (int j = 0; j < height; ++j){
+  for (int j = 0; j < rows; ++j){
     //printf("\n Line #%d : ", j); 
-    for (int i = 0; i < width; ++i){
+    for (int i = 0; i < cols; ++i){
       //printf(" 0x%3X", (int) test_img[j][i].data[0]);
-      bf_window_5x5_and_line_buffer(test_img[j][i].data[0], window, width);
+      bf_window_5x5_and_line_buffer(in_img[j*cols+i], width, window);
+	  out_img[j*cols+i] = (int) window[2][2];
+	  //printf("InImage 0x%3X \n", in_img[j*cols+i]);
+	  // printf("OutImage 0x%3X \n", out_img[j*cols+i]);
+	  //printf("WindowCenter 0x%3X \n", (int) window[2][2]);
     }
   }
   
-  for (int j = 0; j < 5; ++j){
-    printf("\n Line #%d : ", j);
-    for(int i = 0; i < width; ++i){
-      printf("0x%3X ", (int) window[j][i]);
-    }
-  }
+  write_bmp(output_bmp_filename.c_str(), out_img, rows, cols);
 
   if (passed) {
     printf("PASSED\n");
