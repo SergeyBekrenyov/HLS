@@ -22,3 +22,6 @@ sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu/ trusty main'
 sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu/ trusty universe'
 sudo apt update
 sudo apt install gcc-4.4
+
+
+https://titanwolf.org/Network/Articles/Article?AID=ad9fdb77-9b9f-4ccd-b7f7-ecb4cebc4cd0
