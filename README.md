@@ -15,3 +15,10 @@ Ubuntu 18q 18.1_lite
 3. modify makefile export PATH=$PATH:/home/segreyb/intelFPGA/18.1/modelsim_ase/linuxaloem
 4. type "source init_hls.sh"
 5. 
+
+Here is how to install GCC 4.4.7 on Ubuntu 18.04:
+
+sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu/ trusty main'
+sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu/ trusty universe'
+sudo apt update
+sudo apt install gcc-4.4
