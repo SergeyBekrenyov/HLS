@@ -25,3 +25,4 @@ sudo apt install gcc-4.4
 
 
 https://titanwolf.org/Network/Articles/Article?AID=ad9fdb77-9b9f-4ccd-b7f7-ecb4cebc4cd0
+don't forget to install libs!! sudo apt-get install g++-4.4-multilib
